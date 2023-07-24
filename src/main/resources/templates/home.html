@@ -15,40 +15,49 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-<!-- navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" th:href="@{/}" th:text="${username}"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;" data-toggle="modal"
-                   data-target="#addIncomeModal">Add Income</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{/viewIncome}" class="nav-link text-light" style="text-decoration:none;border:none;">View
-                    Income</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;" data-toggle="modal"
-                   data-target="#addExpenseModal">Add Expense</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{/viewExpense}" class="nav-link text-light" style="text-decoration:none;border:none;">View
-                    Expense</a>
-            </li>
-        </ul>
-        <span class="navbar-text">
+<!-- navbar & chart -->
+<div class="container-fluid p-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" th:href="@{/}" th:text="${username}"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
+                       data-toggle="modal"
+                       data-target="#addIncomeModal">Add Income</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/viewIncome}" class="nav-link text-light" style="text-decoration:none;border:none;">View
+                        Income</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
+                       data-toggle="modal"
+                       data-target="#addExpenseModal">Add Expense</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/viewExpense}" class="nav-link text-light" style="text-decoration:none;border:none;">View
+                        Expense</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
             <a th:href="@{/logout}">Logout</a>
         </span>
+        </div>
+    </nav>
+    <!-- pie-chart income vs expense -->
+    <div class="chart-container">
+        <canvas id="incomeVsExpenseChart"></canvas>
     </div>
-</nav>
+</div>
 <!-- income modal -->
 <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalCenterTitle"
      aria-hidden="true">
@@ -139,5 +148,39 @@
         &copy; Jay Rudani &trade; 2023
     </div>
 </div>
+<script th:inline="javascript">
+/*<![CDATA[*/
+        var totalIncome = /*[[${totalIncome}]]*/ 'default';
+        var totalExpense = /*[[${totalExpense}]]*/ 'default';
+
+    var ctx = document.getElementById('incomeVsExpenseChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Income', 'Expense'],
+            datasets: [{
+                data: [totalIncome, totalExpense],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true, // Adjust as needed
+            maintainAspectRatio: true, // Adjust as needed
+            title: {
+                display: true,
+                text: 'Income vs. Expense'
+            }
+        }
+    });
+/*]]>*/
+</script>
 </body>
 </html>

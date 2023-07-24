@@ -29,4 +29,8 @@ public interface WebPageService {
     void deleteExpense(Integer id);
 
     void updateExpense(Integer id, Expense expense);
+
+    Long getTotalIncomeByUser();
+
+    Long getTotalExpenseByUser();
 }

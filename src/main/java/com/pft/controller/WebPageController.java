@@ -35,6 +35,10 @@ public class WebPageController {
     @GetMapping("/")
     public String homePage(Model model, Principal principal) {
         model.addAttribute("username", service.getName(principal.getName()));
+        model.addAttribute("totalIncome", service.getTotalIncomeByUser());
+        model.addAttribute("totalExpense", service.getTotalExpenseByUser());
+        System.out.println(service.getTotalIncomeByUser());
+        System.out.println(service.getTotalExpenseByUser());
         return "home";
     }
 
