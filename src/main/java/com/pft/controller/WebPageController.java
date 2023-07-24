@@ -66,13 +66,13 @@ public class WebPageController {
     @GetMapping("/addExpense")
     public String addExpenseModal(Model model) {
         model.addAttribute("expense", new Expense());
-        return "redirect:/";
+        return "redirect:/viewExpense";
     }
 
     @PostMapping("/addExpense")
     public String addExpenseService(@ModelAttribute("expense") Expense expense) {
         service.saveExpense(expense);
-        return "redirect:/?expenseAdded";
+        return "redirect:/viewExpense?expenseAdded";
     }
 
     @GetMapping("/viewIncome")
@@ -93,5 +93,25 @@ public class WebPageController {
     public String updateIncome(@PathVariable Integer id, @ModelAttribute("incomeUpdate") Income income) {
         service.updateIncome(id, income);
         return "redirect:/viewIncome?incomeUpdated";
+    }
+
+    @GetMapping("/viewExpense")
+    public String viewExpensePage(Model model, Principal principal) {
+        model.addAttribute("expensesByUser", service.getExpensesByUser());
+        model.addAttribute("username", service.getName(principal.getName()));
+        model.addAttribute("expenseUpdate", new Income());
+        return "viewExpense";
+    }
+
+    @GetMapping("/deleteExpense/{id}")
+    public String deleteExpense(@PathVariable Integer id) {
+        service.deleteExpense(id);
+        return "redirect:/viewExpense?expenseDeleted";
+    }
+
+    @PostMapping("/updateExpense/{id}")
+    public String updateExpense(@PathVariable Integer id, @ModelAttribute("expenseUpdate") Expense expense) {
+        service.updateExpense(id, expense);
+        return "redirect:/viewExpense?expenseUpdated";
     }
 }

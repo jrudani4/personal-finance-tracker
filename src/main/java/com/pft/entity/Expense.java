@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Entity(name = "expenses")
 @Data
 @AllArgsConstructor
@@ -23,6 +25,8 @@ public class Expense {
     private Long expenseAmount;
     @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
+    private Date expenseDate;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference

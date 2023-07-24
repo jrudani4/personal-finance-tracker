@@ -84,4 +84,25 @@ public class WebPageServiceImpl implements WebPageService {
         existingIncome.setIncomeDate(income.getIncomeDate());
         incomeRepository.save(existingIncome);
     }
+
+    @Override
+    public List<Expense> getExpensesByUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return expenseRepository.findByUser(getByEmail(email));
+    }
+
+    @Override
+    public void deleteExpense(Integer id) {
+        expenseRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateExpense(Integer id, Expense expense) {
+        Expense existingExpense = expenseRepository.findById(id).orElseThrow();
+        existingExpense.setExpenseType(expense.getExpenseType());
+        existingExpense.setExpenseAmount(expense.getExpenseAmount());
+        existingExpense.setDescription(expense.getDescription());
+        existingExpense.setExpenseDate(expense.getExpenseDate());
+        expenseRepository.save(existingExpense);
+    }
 }

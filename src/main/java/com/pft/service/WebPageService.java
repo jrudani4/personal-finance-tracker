@@ -23,4 +23,10 @@ public interface WebPageService {
     void deleteIncome(Integer id);
 
     void updateIncome(Integer id, Income income);
+
+    List<Expense> getExpensesByUser();
+
+    void deleteExpense(Integer id);
+
+    void updateExpense(Integer id, Expense expense);
 }

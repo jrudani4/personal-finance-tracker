@@ -40,6 +40,10 @@
                 <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;" data-toggle="modal"
                    data-target="#addExpenseModal">Add Expense</a>
             </li>
+            <li class="nav-item">
+                <a th:href="@{/viewExpense}" class="nav-link text-light" style="text-decoration:none;border:none;">View
+                    Expense</a>
+            </li>
         </ul>
         <span class="navbar-text">
             <a th:href="@{/logout}">Logout</a>
@@ -216,6 +220,10 @@
                     <div class="form-group">
                         <label for="expenseDescription">Description:</label>
                         <textarea class="form-control" id="expenseDescription" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseDate">Date:</label>
+                        <input type="date" class="form-control" id="expenseDate" name="expenseDate" required>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
