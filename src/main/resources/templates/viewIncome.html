@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Income</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}" th:text="${username}"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;" data-toggle="modal"
+                   data-target="#addIncomeModal">Add Income</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/viewIncome}" class="nav-link text-light" style="text-decoration:none;border:none;">View
+                    Income</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;" data-toggle="modal"
+                   data-target="#addExpenseModal">Add Expense</a>
+            </li>
+        </ul>
+        <span class="navbar-text">
+            <a th:href="@{/logout}">Logout</a>
+        </span>
+    </div>
+</nav>
+<!-- income success message -->
+<div th:if="${param.incomeAdded}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Income Added!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<!-- income edited message -->
+<div th:if="${param.incomeUpdated}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Income Updated!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<!-- income deleted message -->
+<div th:if="${param.incomeDeleted}" class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Income Deleted!</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<!-- table of incomes -->
+<div class="container mt-5">
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Sr No.</th>
+            <th scope="col">Income Type</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${incomesByUser.empty}">
+            <td colspan="2">No Record(s) Available!</td>
+        </tr>
+        <tr th:each="income, iStat : ${incomesByUser}">
+            <td th:text="${iStat.count}"></td>
+            <td th:text="${income.incomeType}"></td>
+            <td th:text="${income.incomeAmount}"></td>
+            <td th:text="${income.incomeDate}"></td>
+            <td th:text="${income.description}"></td>
+            <td><a th:href="@{/deleteIncome/{id}(id=${income.id})}"><i
+                    class="text-danger fa-solid fa-trash-can fa-lg"></i></a>
+                | <a href="#" style="text-decoration:none;border:none;" data-toggle="modal"
+                     data-target="#editIncomeModal" th:attr="data-target='#editIncomeModal'+${income.id}"><i
+                        class="fa-solid fa-pen-to-square fa-lg"></i></a>
+            </td>
+            <!-- edit income modal -->
+            <div class="modal fade" th:id="editIncomeModal+${income.id}" tabindex="-1" role="dialog"
+                 aria-labelledby="editIncomeModalCenterTitle"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editIncomeModalLongTitle">Edit Income</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/updateIncome/{id}(id=${income.id})}" method="post">
+                                <div class="form-group">
+                                    <label for="editIncomeType">Income Type:</label>
+                                    <select class="form-control" id="editIncomeType" name="incomeType" required>
+                                        <option selected th:value="${income.incomeType}"
+                                                th:text="${income.incomeType}"></option>
+                                        <option th:each="income : ${T(com.pft.entity.enums.IncomeType).values()}"
+                                                th:value="${income}" th:text="${income}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editIncomeAmount">Amount:</label>
+                                    <input type="number" th:value="${income.incomeAmount}" class="form-control"
+                                           id="editIncomeAmount" name="incomeAmount" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editDescription">Description:</label>
+                                    <textarea class="form-control" th:text="${income.description}" id="editDescription"
+                                              name="description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="incomeUpdateDate">Date:</label>
+                                    <input type="date" class="form-control" th:value="${income.incomeDate}" id="incomeUpdateDate" name="incomeDate">
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- income modal -->
+<div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIncomeModalLongTitle">Add Income</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/addIncome}" method="post">
+                    <div class="form-group">
+                        <label for="incomeType">Income Type:</label>
+                        <select class="form-control" id="incomeType" name="incomeType" required>
+                            <option selected disabled>-- Select Type of Income --</option>
+                            <option th:each="income : ${T(com.pft.entity.enums.IncomeType).values()}"
+                                    th:value="${income}" th:text="${income}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeAmount">Amount:</label>
+                        <input type="number" class="form-control" id="incomeAmount" name="incomeAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" id="description" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeDate">Date:</label>
+                        <input type="date" class="form-control" id="incomeDate" name="incomeDate">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- expense modal -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" role="dialog" aria-labelledby="addExpenseModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addExpenseModalLongTitle">Add Expense</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/addExpense}" method="post">
+                    <div class="form-group">
+                        <label for="expenseType">Expense Type:</label>
+                        <select class="form-control" id="expenseType" name="expenseType" required>
+                            <option selected disabled>-- Select Type of Expense --</option>
+                            <option th:each="expense : ${T(com.pft.entity.enums.ExpenseType).values()}"
+                                    th:value="${expense}" th:text="${expense}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseAmount">Amount:</label>
+                        <input type="number" class="form-control" id="expenseAmount" name="expenseAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseDescription">Description:</label>
+                        <textarea class="form-control" id="expenseDescription" name="description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<div class="footer fixed-bottom font-small blue pt-4">
+    <div class="footer-copyright text-center py-3">
+        &copy; Jay Rudani &trade; 2023
+    </div>
+</div>
+</body>
+</html>
