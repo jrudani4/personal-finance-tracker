@@ -21,7 +21,7 @@ public class WebPageController {
 
     private final WebPageService service;
 
-    private static final String usernameString = "username";
+    private static final String USERNAME_STRING = "username";
 
     @GetMapping("/login")
     public String loginPage() {
@@ -36,7 +36,7 @@ public class WebPageController {
 
     @GetMapping("/")
     public String homePage(Model model, Principal principal) {
-        model.addAttribute(usernameString, service.getName(principal.getName()));
+        model.addAttribute(USERNAME_STRING, service.getName(principal.getName()));
         model.addAttribute("totalIncome", service.getTotalIncomeByUser());
         model.addAttribute("totalExpense", service.getTotalExpenseByUser());
         return "home";
@@ -83,7 +83,7 @@ public class WebPageController {
     @GetMapping("/viewIncome")
     public String viewIncomePage(Model model, Principal principal) {
         model.addAttribute("incomesByUser", service.getIncomesByUser());
-        model.addAttribute(usernameString, service.getName(principal.getName()));
+        model.addAttribute(USERNAME_STRING, service.getName(principal.getName()));
         model.addAttribute("incomeUpdate", new Income());
         return "viewIncome";
     }
@@ -103,7 +103,7 @@ public class WebPageController {
     @GetMapping("/viewExpense")
     public String viewExpensePage(Model model, Principal principal) {
         model.addAttribute("expensesByUser", service.getExpensesByUser());
-        model.addAttribute(usernameString, service.getName(principal.getName()));
+        model.addAttribute(USERNAME_STRING, service.getName(principal.getName()));
         model.addAttribute("expenseUpdate", new Income());
         return "viewExpense";
     }
