@@ -4,7 +4,7 @@ import com.pft.entity.Expense;
 import com.pft.entity.Income;
 import com.pft.entity.User;
 import com.pft.service.WebPageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class WebPageController {
 
-    @Autowired
-    private WebPageService service;
+    private final WebPageService service;
+
+    private static final String usernameString = "username";
 
     @GetMapping("/login")
     public String loginPage() {
@@ -34,7 +36,7 @@ public class WebPageController {
 
     @GetMapping("/")
     public String homePage(Model model, Principal principal) {
-        model.addAttribute("username", service.getName(principal.getName()));
+        model.addAttribute(usernameString, service.getName(principal.getName()));
         model.addAttribute("totalIncome", service.getTotalIncomeByUser());
         model.addAttribute("totalExpense", service.getTotalExpenseByUser());
         return "home";
@@ -47,6 +49,7 @@ public class WebPageController {
                 return "redirect:/register?error";
 
         } catch (UsernameNotFoundException ignored) {
+            return "redirect:/register";
         }
 
         service.saveUser(user);
@@ -80,7 +83,7 @@ public class WebPageController {
     @GetMapping("/viewIncome")
     public String viewIncomePage(Model model, Principal principal) {
         model.addAttribute("incomesByUser", service.getIncomesByUser());
-        model.addAttribute("username", service.getName(principal.getName()));
+        model.addAttribute(usernameString, service.getName(principal.getName()));
         model.addAttribute("incomeUpdate", new Income());
         return "viewIncome";
     }
@@ -100,7 +103,7 @@ public class WebPageController {
     @GetMapping("/viewExpense")
     public String viewExpensePage(Model model, Principal principal) {
         model.addAttribute("expensesByUser", service.getExpensesByUser());
-        model.addAttribute("username", service.getName(principal.getName()));
+        model.addAttribute(usernameString, service.getName(principal.getName()));
         model.addAttribute("expenseUpdate", new Income());
         return "viewExpense";
     }
