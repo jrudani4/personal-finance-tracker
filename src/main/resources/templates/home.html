@@ -31,25 +31,31 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
-                               data-toggle="modal"
-                               data-target="#addIncomeModal">Add Income</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="incomeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Income
+                            </a>
+                            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown" style="text-decoration:none;border:none;">
+                                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
+                                   data-toggle="modal"
+                                   data-target="#addIncomeModal">Add Income</a>
+                                <a th:href="@{/viewIncome}" class="nav-link text-light"
+                                   style="text-decoration:none;border:none;">View
+                                    Income</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a th:href="@{/viewIncome}" class="nav-link text-light"
-                               style="text-decoration:none;border:none;">View
-                                Income</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
-                               data-toggle="modal"
-                               data-target="#addExpenseModal">Add Expense</a>
-                        </li>
-                        <li class="nav-item">
-                            <a th:href="@{/viewExpense}" class="nav-link text-light"
-                               style="text-decoration:none;border:none;">View
-                                Expense</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="expenseDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Expense
+                            </a>
+                            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown" style="text-decoration:none;border:none;">
+                                <a href="#" class="nav-link text-light" style="text-decoration:none;border:none;"
+                                   data-toggle="modal"
+                                   data-target="#addExpenseModal">Add Expense</a>
+                                <a th:href="@{/viewExpense}" class="nav-link text-light"
+                                   style="text-decoration:none;border:none;">View
+                                    Expense</a>
+                            </div>
                         </li>
                     </ul>
                     <span class="navbar-text">
@@ -157,7 +163,7 @@
 <!-- Footer -->
 <div class="footer fixed-bottom font-small blue pt-4">
     <div class="footer-copyright text-center py-3">
-        &copy; Jay Rudani &trade; 2023
+        &copy; Jay Rudani &trade; 2024
     </div>
 </div>
 <script th:inline="javascript">
@@ -171,7 +177,7 @@
             data: {
                 labels: ['Income', 'Expense'],
                 datasets: [{
-                    data: [totalIncome, totalExpense],
+                    data: [totalIncome-totalExpense, totalExpense],
                     backgroundColor: [
                         'rgba(75, 192, 192, 0.2)',
                         'rgba(255, 99, 132, 0.2)',
