@@ -102,7 +102,7 @@
         </tr>
         <tr th:each="expense, iStat : ${expensesByUser}">
             <td th:text="${iStat.count}"></td>
-            <td th:text="${expense.expenseType}"></td>
+            <td th:text="${T(com.pft.entity.enums.ExpenseType).valueOf(expense.expenseType).getValue()}"></td>
             <td th:text="${expense.expenseAmount}"></td>
             <td th:text="${expense.expenseDate}"></td>
             <td th:text="${expense.description}"></td>
@@ -112,7 +112,7 @@
                      data-target="#editExpenseModal" th:attr="data-target='#editExpenseModal'+${expense.id}"><i
                         class="fa-solid fa-pen-to-square fa-lg"></i></a>
             </td>
-            <!-- edit income modal -->
+            <!-- edit expense modal -->
             <div class="modal fade" th:id="editExpenseModal+${expense.id}" tabindex="-1" role="dialog"
                  aria-labelledby="editExpenseModalCenterTitle"
                  aria-hidden="true">
@@ -130,9 +130,9 @@
                                     <label for="editExpenseType">Expense Type:</label>
                                     <select class="form-control" id="editExpenseType" name="expenseType" required>
                                         <option selected th:value="${expense.expenseType}"
-                                                th:text="${expense.expenseType}"></option>
+                                                th:text="${T(com.pft.entity.enums.ExpenseType).valueOf(expense.expenseType).getValue()}"></option>
                                         <option th:each="expense : ${T(com.pft.entity.enums.ExpenseType).values()}"
-                                                th:value="${expense}" th:text="${expense}"></option>
+                                                th:value="${expense}" th:text="${expense.value}"></option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -223,7 +223,7 @@
                         <select class="form-control" id="expenseType" name="expenseType" required>
                             <option selected disabled>-- Select Type of Expense --</option>
                             <option th:each="expense : ${T(com.pft.entity.enums.ExpenseType).values()}"
-                                    th:value="${expense}" th:text="${expense}"></option>
+                                    th:value="${expense}" th:text="${expense.value}"></option>
                         </select>
                     </div>
                     <div class="form-group">

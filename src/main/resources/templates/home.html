@@ -136,7 +136,7 @@
                         <select class="form-control" id="expenseType" name="expenseType" required>
                             <option selected disabled>-- Select Type of Expense --</option>
                             <option th:each="expense : ${T(com.pft.entity.enums.ExpenseType).values()}"
-                                    th:value="${expense}" th:text="${expense}"></option>
+                                    th:value="${expense}" th:text="${expense.value}"></option>
                         </select>
                     </div>
                     <div class="form-group">
